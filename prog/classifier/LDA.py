@@ -22,9 +22,11 @@ class LDAClassifer():
         self._test_ids = test_ids
         self._classes = np.array(classes)
 
+        self._hyperparameters = np.zeros(3, dtype='<U5')
+
         # "Single value decomposition" ne calcul pas de matrice de covariance, ce qui est bon
         # en l'occurence vu le grand nombre de dimensions
-        self._classifier = LinearDiscriminantAnalysis(solver='svd')
+        self._classifier = LinearDiscriminantAnalysis()
         self._splitted_data = self._split_data()
 
 
@@ -48,10 +50,7 @@ class LDAClassifer():
         """
         Entraine le modèle avec les jeux de données fournis à l'instanciation
         """
-        x_train = self._splitted_data[0]
-        y_train = self._splitted_data[1]
-        self._classifier.fit(x_train, y_train)
-        print(f'{self._name} trained!')
+        self._classifier.fit(self._splitted_data[0], self._splitted_data[1])
 
     def predict(self, x_predict, text_predictions=False):
         """predict
@@ -77,3 +76,33 @@ class LDAClassifer():
         """
         prediction = self.predict(self._splitted_data[0])
         return sklearn.metrics.accuracy_score( self._splitted_data[1], prediction)
+
+    def search_hyperparameters(self):
+        _solvers = ['svd', 'lsqr', 'eigen']
+        _components = np.int_(np.ceil(np.linspace(self._classes.shape[0] - 10, self._classes.shape[0] - 1)))
+        _tolerances = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]
+        _max_score = -np.inf
+        _counter = 0
+        for solver in _solvers:
+            for component in _components:
+                for tolerance in _tolerances:
+                    self._classifier = LinearDiscriminantAnalysis(solver=solver,
+                                                                  n_components=component,
+                                                                  tol=tolerance)
+                    self.train()
+                    _score = self.get_validation_accuracy()
+                    if _score > _max_score:
+                        _max_score = self.get_validation_accuracy()
+                        self._hyperparameters = [solver, component, tolerance]
+                        print(f'hyperparameters updated - solver: {solver}, '
+                              f'component {component}, '
+                              f'tolerance {tolerance}')
+                    _counter += 1
+                    print(f'Searching hyperparameters, iteration: '
+                          f'{_counter}/{len(_solvers) * len(_components) * len(_tolerances)}, '
+                          f'score: {_score }, max score: {_max_score}')
+
+        self._classifier = LinearDiscriminantAnalysis(solver=self._hyperparameters[0],
+                                                      n_components=self._hyperparameters[1],
+                                                      tol=self._hyperparameters[2])
+        self.train()

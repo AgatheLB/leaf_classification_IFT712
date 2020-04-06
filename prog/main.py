@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 from zipfile import ZipFile
 from classifier import *
+from classifier.MLP import MLP
 from classifier.LDA import LDAClassifer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
@@ -68,7 +69,7 @@ if __name__ == "__main__":
         pass
     elif method == 'linear_discriminant_analysis':
         lda_classifier = LDAClassifer(train, labels, test, test_ids, classes)
-        lda_classifier.train()
+        lda_classifier.search_hyperparameters()
         print(f'Justesse d\'entrainement: {lda_classifier.get_training_accuracy():%}')
         print(f'Justesse de validation: {lda_classifier.get_validation_accuracy():%}')
         print(f'Prédiction: {lda_classifier.predict(test)}')
