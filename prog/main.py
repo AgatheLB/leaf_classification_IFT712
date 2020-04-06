@@ -2,13 +2,16 @@
 Pour le fonctionnement du package kaggle, https://github.com/Kaggle/kaggle-api
 '''
 
-import sklearn, argparse, os, kaggle
+import sklearn, argparse, os, kaggle, glob
 from zipfile import ZipFile
+
+import MLPManager
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
     parser.add_argument('--method', type=str, default='MLP',
                          help='Permet d,utiliser la methode specifie.', choices=['MLP','regression','SVM','randomforest','adaboost'])
+    parser.add_argument('--hidden_layer', type=tuple, default=(20,))
     return parser.parse_args()
 
 
@@ -23,13 +26,18 @@ if __name__ == "__main__":
         os.system('kaggle competitions download -c leaf-classification')
         with ZipFile('leaf-classification.zip','r') as zipObj:
             zipObj.extractall()
-        os.remove('leaf-classification.zip')
+        with ZipFile('train.csv.zip','r') as zipObj:
+            zipObj.extractall()
+        with ZipFile('test.csv.zip','r') as zipObj:
+            zipObj.extractall()
+        for f in glob.glob('*.zip'):
+            os.remove(f)
         os.chdir('..')
 
-    
-
     if method == 'MLP':
-        pass
+        hidden_layer = args.hidden_layer
+        mlp = MLPManager()
+
     elif method == 'regression':
         pass
     elif method == 'SVM':
