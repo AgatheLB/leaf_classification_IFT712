@@ -92,7 +92,7 @@ class LDAClassifer():
                     self.train()
                     _score = self.get_validation_accuracy()
                     if _score > _max_score:
-                        _max_score = self.get_validation_accuracy()
+                        _max_score = _score
                         self._hyperparameters = [solver, component, tolerance]
                         print(f'hyperparameters updated - solver: {solver}, '
                               f'component {component}, '
