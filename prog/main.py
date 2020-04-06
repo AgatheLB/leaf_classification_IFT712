@@ -7,9 +7,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from zipfile import ZipFile
-from classifier import *
+from classifier.MLP import MLP
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.metrics import accuracy_score
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
@@ -38,11 +39,14 @@ def createDataSets():
 
     data = LabelEncoder().fit(train.species)
     labels = data.transform(train.species)
-    classes = list(data.classes_)
+    classes = np.array(data.classes_)
     test_ids = test.id
 
     train = train.drop(['species','id'], axis=1)
     test = test.drop(['id'], axis=1)
+
+    train = train.to_numpy()
+    test = test.to_numpy()
 
     return train, labels, test, test_ids, classes
 
@@ -52,10 +56,34 @@ if __name__ == "__main__":
     method = args.method
 
     train, labels, test, test_ids, classes = createDataSets()
-        
+
     if method == 'MLP':
-        hidden_layer = args.hidden_layer
-        mlp = MLP(train, test, labels, test_ids, classes)
+        classifier = MLP(train, test, labels, test_ids, classes)
+        
+        hlayers = [ (10,),
+                    (10,10),
+                    (100,),
+                    (100,100)
+        ]
+        lr = [  1e-3,
+                2e-3,
+                3e-3,
+                1e-4,
+                2e-4,
+                5e-5
+        ]
+
+        mlp, hyperParams = classifier.hyperparamSearch(hiddens=hlayers,learning_rates=lr)
+        print('meilleure hyper parametre trouver: {}'.format(hyperParams))
+        test_pred_prob = mlp.predict_proba(test)
+        
+        rndIdx = np.random.randint(0, len(test_pred_prob))
+        top10idx = test_pred_prob[rndIdx].argsort()[-10:][::-1]
+        top10Classes = classes[top10idx]
+        test = test_pred_prob[rndIdx][top10idx]
+        plt.bar(top10Classes,test)
+        plt.xticks(rotation=-45)
+        plt.show()
 
     elif method == 'regression':
         pass
