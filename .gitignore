@@ -130,3 +130,9 @@ dmypy.json
 
 #Visual Code
 *.vscode
+
+# Files
+*.zip
+*.csv
+
+.idea/
