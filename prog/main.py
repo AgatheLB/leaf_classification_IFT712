@@ -50,11 +50,14 @@ def createDataSets():
 
 if __name__ == "__main__":
     args = argument_parser()
-
     method = args.method
 
+    train, labels, test, test_ids, classes = createDataSets()
+
     if method == 'MLP':
-        pass
+        hidden_layer = args.hidden_layer
+        mlp = MLP(train, test, labels, test_ids, classes)
+
     elif method == 'regression':
         pass
     elif method == 'SVM':
