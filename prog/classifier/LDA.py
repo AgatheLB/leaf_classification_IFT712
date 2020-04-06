@@ -55,8 +55,8 @@ class LDAClassifer():
 
     def predict(self, x_predict, text_predictions=False):
         """predict
-        :param x_predict: Jeu de données à classifier
-        :param text_predictions: obtenir la classification en text (au lieu des int)
+        :param x_predict: Data to classify
+        :param text_predictions: Obtain text prediction (instead of int)
         :return: La classification pour chaque élments de x_predict, en chiffre ou en text selon text_prediction
         """
         if text_predictions:
@@ -64,9 +64,16 @@ class LDAClassifer():
         else:
             return self._classifier.predict(x_predict)
 
-    def validation(self):
+    def get_validation_accuracy(self):
         """validation
         :return: La justesse d'entrainement
         """
         prediction = self.predict(self._splitted_data[2])
         return sklearn.metrics.accuracy_score( self._splitted_data[3], prediction)
+
+    def get_training_accuracy(self):
+        """validation
+        :return: La justesse d'entrainement
+        """
+        prediction = self.predict(self._splitted_data[0])
+        return sklearn.metrics.accuracy_score( self._splitted_data[1], prediction)
