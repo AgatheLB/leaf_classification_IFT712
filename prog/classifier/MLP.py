@@ -1,7 +1,6 @@
 from sklearn.neural_network import MLPClassifier
 from classifier.classifier import Classifier
 
-
 class MLP(Classifier):
     """
     Classificateur - MultiLayer Perceptron
