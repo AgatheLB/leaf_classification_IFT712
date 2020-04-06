@@ -8,13 +8,14 @@ import matplotlib.pyplot as plt
 
 from zipfile import ZipFile
 from classifier import *
+from classifier.LDA import LDAClassifer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
     parser.add_argument('--method', type=str, default='MLP',
-                         help='Permet d utiliser la methode specifie ou bien tous les faire.', choices=['MLP','regression','SVM','randomforest','adaboost', 'all'])
+                         help='Permet d utiliser la methode specifie ou bien tous les faire.', choices=['MLP','regression','SVM','randomforest','adaboost', 'linear_discriminant_analysis', 'all'])
     parser.add_argument('--hidden_layer', type=tuple, default=(20,))
     return parser.parse_args()
 
@@ -62,8 +63,14 @@ if __name__ == "__main__":
         pass
     elif method == 'adaboost':
         pass
-    elif method == '':
-        pass
+    elif method == 'linear_discriminant_analysis':
+        data = createDataSets()
+        lda_classifier = LDAClassifer(*data)
+        lda_classifier = LDAClassifer(*data)
+        lda_classifier.train()
+        print(f'Training accurac is: {lda_classifier.test():%}')
+        print(f'Prediction: {lda_classifier.predict(data[2])}')
+        print(f'Text Prediction: {lda_classifier.predict(data[2], text_predictions=True)}')
     elif method == 'all':
         pass
     else:
