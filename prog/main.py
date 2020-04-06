@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from zipfile import ZipFile
 from classifier import *
 from classifier.MLP import MLP
+from classifier.NB import NBClassifer
 from classifier.LDA import LDAClassifer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
@@ -16,7 +17,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 def argument_parser():
     parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
     parser.add_argument('--method', type=str, default='MLP',
-                         help='Permet d utiliser la methode specifie ou bien tous les faire.', choices=['MLP','regression','SVM','randomforest','adaboost', 'linear_discriminant_analysis', 'all'])
+                         help='Permet d utiliser la methode specifie ou bien tous les faire.', choices=['MLP','regression','SVM','randomforest','naive_bayes', 'linear_discriminant_analysis', 'all'])
     parser.add_argument('--hidden_layer', type=tuple, default=(20,))
     return parser.parse_args()
 
@@ -65,7 +66,13 @@ if __name__ == "__main__":
         pass
     elif method == 'randomforest':
         pass
-    elif method == 'adaboost':
+    elif method == 'naive_bayes':
+        nb_classifier = NBClassifer(train, labels, test, test_ids, classes)
+        nb_classifier.search_hyperparameters()
+        print(f'Justesse d\'entrainement: {nb_classifier.get_training_accuracy():%}')
+        print(f'Justesse de validation: {nb_classifier.get_validation_accuracy():%}')
+        print(f'Prédiction: {nb_classifier.predict(test)}')
+        print(f'Prediction en texte: {nb_classifier.predict(test, text_predictions=True)}')
         pass
     elif method == 'linear_discriminant_analysis':
         lda_classifier = LDAClassifer(train, labels, test, test_ids, classes)

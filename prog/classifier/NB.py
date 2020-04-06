@@ -1,10 +1,10 @@
 import sklearn
 import numpy as np
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+# from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.naive_bayes import GaussianNB
 
-
-class LDAClassifer():
+class NBClassifer():
     """Classificateur - Analyse du Discriminante Linéaire
     """
     def __init__(self, train, labels, test, test_ids, classes):
@@ -15,17 +15,16 @@ class LDAClassifer():
         :param test_ids: id de la dataframe de test pour le jeu de données leaf-classification
         :param classes: noms des espèces végétales
         """
-        self.name = LinearDiscriminantAnalysis.__name__
-
+        self.name = GaussianNB.__name__
         self._train = train
         self._test = test
         self._labels = labels
         self._test_ids = test_ids
         self._classes = np.array(classes)
 
-        # "Single value decomposition" ne calcul pas de matrice de covariance, ce qui est bon
-        # en l'occurence vu le grand nombre de dimensions
-        self._classifier = LinearDiscriminantAnalysis()
+        self._hyperparameters = np.zeros(3, dtype='<U5')
+
+        self._classifier = GaussianNB()
         self._splitted_data = self._split_data()
 
 
@@ -77,32 +76,22 @@ class LDAClassifer():
         return sklearn.metrics.accuracy_score( self._splitted_data[1], prediction)
 
     def search_hyperparameters(self):
-        _solvers = ['svd', 'lsqr', 'eigen']
-        _components = np.int_(np.ceil(np.linspace(self._classes.shape[0] - 10, self._classes.shape[0] - 1)))
-        _tolerances = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]
+        variance_smoothing = [1e-11, 1e-10, 1e-09, 1e-08, 1e-07, 1e-06, 1e-04, 1e-3]
         _max_score = -np.inf
         _counter = 0
-        _hyperparameters = np.zeros(3, dtype='<U5')
-        for solver in _solvers:
-            for component in _components:
-                for tolerance in _tolerances:
-                    self._classifier = LinearDiscriminantAnalysis(solver=solver,
-                                                                  n_components=component,
-                                                                  tol=tolerance)
-                    self.train()
-                    _score = self.get_validation_accuracy()
-                    if _score > _max_score:
-                        _max_score = _score
-                        _hyperparameters = [solver, component, tolerance]
-                        print(f'hyperparameters updated - solver: {solver}, '
-                              f'component {component}, '
-                              f'tolerance {tolerance}')
-                    _counter += 1
-                    print(f'Searching hyperparameters for {self.name}, iteration: '
-                          f'{_counter}/{len(_solvers) * len(_components) * len(_tolerances)}, '
-                          f'score: {_score:% }, max score: {_max_score:%}')
+        _hyperparameters = 0
+        for var_smoothing in variance_smoothing:
+            self._classifier = GaussianNB(var_smoothing=var_smoothing)
+            self.train()
+            _score = self.get_validation_accuracy()
+            if _score > _max_score:
+                _max_score = _score
+                _hyperparameters = var_smoothing
+                print(f'hyperparameters updated - variance smoothing: {var_smoothing}')
+            _counter += 1
+            print(f'Searching hyperparameters for {self.name}, iteration: '
+                  f'{_counter}/{len(variance_smoothing)} '
+                  f'score: {_score:%}, max score: {_max_score:%}')
 
-        self._classifier = LinearDiscriminantAnalysis(solver=_hyperparameters[0],
-                                                      n_components=_hyperparameters[1],
-                                                      tol=_hyperparameters[2])
+        self._classifier = GaussianNB(var_smoothing=_hyperparameters)
         self.train()
