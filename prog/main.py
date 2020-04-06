@@ -67,13 +67,11 @@ if __name__ == "__main__":
     elif method == 'adaboost':
         pass
     elif method == 'linear_discriminant_analysis':
-        data = createDataSets()
-        lda_classifier = LDAClassifer(*data)
-        lda_classifier = LDAClassifer(*data)
+        lda_classifier = LDAClassifer(train, test, labels, test_ids, classes)
         lda_classifier.train()
-        print(f'Training accurac is: {lda_classifier.test():%}')
-        print(f'Prediction: {lda_classifier.predict(data[2])}')
-        print(f'Text Prediction: {lda_classifier.predict(data[2], text_predictions=True)}')
+        print(f'Training accurac is: {lda_classifier.validation():%}')
+        print(f'Prediction: {lda_classifier.predict(labels)}')
+        print(f'Text Prediction: {lda_classifier.predict(labels, text_predictions=True)}')
     elif method == 'all':
         pass
     else:

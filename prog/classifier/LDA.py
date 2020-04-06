@@ -64,8 +64,8 @@ class LDAClassifer():
         else:
             return self._classifier.predict(x_predict)
 
-    def test(self):
-        """test
+    def validation(self):
+        """validation
         :return: La justesse d'entrainement
         """
         prediction = self.predict(self._splitted_data[2])
