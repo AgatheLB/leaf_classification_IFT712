@@ -58,32 +58,23 @@ if __name__ == '__main__':
     train, labels, test, test_ids, classes = createDataSets()
 
     if method == 'MLP':
-        mlp_classifier = MLP(train, labels, test, test_ids, classes)
-        mlp_classifier.search_hyperparameters()
-        mlp_classifier.train()
-        mlp_classifier.display_accuracies()
+        classifier = MLP(train, labels, test, test_ids, classes)
     elif method == 'regression':
         pass
     elif method == 'SVM':
         pass
     elif method == 'randomforest':
-        rf_classifier = RF(train, labels, test, test_ids, classes)
-        rf_classifier.search_hyperparameters()
-        rf_classifier.train()
-        rf_classifier.display_accuracies()
+        classifier = RF(train, labels, test, test_ids, classes)
     elif method == 'adaboost':
         pass
     elif method == 'naive_bayes':
-        nb_classifier = NB(train, labels, test, test_ids, classes)
-        nb_classifier.search_hyperparameters()
-        nb_classifier.train()
-        nb_classifier.display_accuracies()
+        classifier = NB(train, labels, test, test_ids, classes)
     elif method == 'linear_discriminant_analysis':
-        lda_classifier = LDA(train, labels, test, test_ids, classes)
-        lda_classifier.search_hyperparameters()
-        lda_classifier.train()
-        lda_classifier.display_accuracies()
+        classifier = LDA(train, labels, test, test_ids, classes)
     elif method == 'all':
         pass
     else:
         raise Exception('not a valid method')
+    classifier.search_hyperparameters()
+    classifier.train()
+    classifier.display_accuracies()
