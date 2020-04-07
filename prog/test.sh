@@ -6,7 +6,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
-log_file='test_log.txt'
+log_file='log_test.txt'
 
 if [ -f "$log_file" ]
 then

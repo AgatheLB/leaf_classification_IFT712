@@ -140,4 +140,4 @@ dmypy.json
 # MacOs
 .DS_Store
 
-prog/*log.txt
+prog/log_test.txt
