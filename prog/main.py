@@ -63,11 +63,7 @@ if __name__ == '__main__':
     elif method == 'regression':
         pass
     elif method == 'SVM':
-        svm_classifier = SVM(train, labels, test, test_ids, classes)
-        svm_classifier.hyperparam_search()
-        svm_classifier.train()
-        print(f'Justesse d\'entrainement: {svm_classifier.get_training_accuracy():%}')
-        print(f'Justesse de validation: {svm_classifier.get_validation_accuracy():%}')
+        classifier = SVM(train, labels, test, test_ids, classes)
     elif method == 'randomforest':
         classifier = RF(train, labels, test, test_ids, classes)
     elif method == 'adaboost':

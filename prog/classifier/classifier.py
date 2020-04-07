@@ -74,5 +74,5 @@ class Classifier:
         return accuracy_score(self._y_valid, self._classifier.predict(self._X_valid))
 
     def display_accuracies(self):
-        print(f'Justesse d\'entrainement: {self.get_training_accuracy():%}')
-        print(f'Justesse de validation: {self.get_validation_accuracy():%}')
+        print(f'Justesse d\'entrainement: {self.get_training_accuracy():.2%}')
+        print(f'Justesse de validation: {self.get_validation_accuracy():.2%}')
