@@ -5,7 +5,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import GaussianNB
 
-class NBClassifer():
+class NB():
     """Classificateur - Bayes Naif
     """
     def __init__(self, train, labels, test, test_ids, classes):

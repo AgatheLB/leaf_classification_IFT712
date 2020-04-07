@@ -5,7 +5,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import GridSearchCV
 
 
-class LDAClassifer():
+class LDA():
     """Classificateur - Analyse du Discriminante Linéaire
     """
     def __init__(self, train, labels, test, test_ids, classes):

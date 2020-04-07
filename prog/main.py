@@ -7,9 +7,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from zipfile import ZipFile
-from classifier import *
-from classifier.LDA import LDAClassifer
+from classifier.NB import NB
+from classifier.LDA import LDA
 from classifier.RF import RF
+from classifier.MLP import MLP
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
 
@@ -73,13 +74,13 @@ if __name__ == '__main__':
     elif method == 'adaboost':
         pass
     elif method == 'naive_bayes':
-        nb_classifier = NBClassifer(train, labels, test, test_ids, classes)
+        nb_classifier = NB(train, labels, test, test_ids, classes)
         nb_classifier.search_hyperparameters()
         nb_classifier.train()
         print(f'Justesse d\'entrainement: {nb_classifier.get_training_accuracy():.2%}')
         print(f'Justesse de validation: {nb_classifier.get_validation_accuracy():.2%}')
     elif method == 'linear_discriminant_analysis':
-        lda_classifier = LDAClassifer(train, labels, test, test_ids, classes)
+        lda_classifier = LDA(train, labels, test, test_ids, classes)
         lda_classifier.search_hyperparameters()
         lda_classifier.train()
         print(f'Justesse d\'entrainement: {lda_classifier.get_training_accuracy():.2%}')
