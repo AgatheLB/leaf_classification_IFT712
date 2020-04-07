@@ -58,34 +58,23 @@ if __name__ == '__main__':
     train, labels, test, test_ids, classes = createDataSets()
 
     if method == 'MLP':
-        hidden_layer = args.hidden_layer
-        mlp = MLP(train, test, labels, test_ids, classes)
-
+        classifier = MLP(train, labels, test, test_ids, classes)
     elif method == 'regression':
         pass
     elif method == 'SVM':
         pass
     elif method == 'randomforest':
-        rf_classifier = RF(train, labels, test, test_ids, classes)
-        rf_classifier.hyperparam_search()
-        rf_classifier.train()
-        print(f'Justesse d\'entrainement: {rf_classifier.get_training_accuracy():%}')
-        print(f'Justesse de validation: {rf_classifier.get_validation_accuracy():%}')
+        classifier = RF(train, labels, test, test_ids, classes)
     elif method == 'adaboost':
         pass
     elif method == 'naive_bayes':
-        nb_classifier = NB(train, labels, test, test_ids, classes)
-        nb_classifier.search_hyperparameters()
-        nb_classifier.train()
-        print(f'Justesse d\'entrainement: {nb_classifier.get_training_accuracy():.2%}')
-        print(f'Justesse de validation: {nb_classifier.get_validation_accuracy():.2%}')
+        classifier = NB(train, labels, test, test_ids, classes)
     elif method == 'linear_discriminant_analysis':
-        lda_classifier = LDA(train, labels, test, test_ids, classes)
-        lda_classifier.search_hyperparameters()
-        lda_classifier.train()
-        print(f'Justesse d\'entrainement: {lda_classifier.get_training_accuracy():.2%}')
-        print(f'Justesse de validation: {lda_classifier.get_validation_accuracy():.2%}')
+        classifier = LDA(train, labels, test, test_ids, classes)
     elif method == 'all':
         pass
     else:
         raise Exception('not a valid method')
+    classifier.search_hyperparameters()
+    classifier.train()
+    classifier.display_accuracies()
