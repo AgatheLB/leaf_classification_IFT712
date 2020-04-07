@@ -14,11 +14,10 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
 
 
-
 def argument_parser():
     parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
     parser.add_argument('--method', type=str, default='MLP',
-                         help='Permet d utiliser la methode specifie ou bien tous les faire.', choices=['MLP','regression','SVM','randomforest','adaboost', 'linear_discriminant_analysis', 'all'])
+                         help='Permet d utiliser la methode specifie ou bien tous les faire.', choices=['MLP','regression','SVM','randomforest','naive_bayes', 'linear_discriminant_analysis', 'all'])
     parser.add_argument('--hidden_layer', type=tuple, default=(20,))
     return parser.parse_args()
 
@@ -73,13 +72,18 @@ if __name__ == '__main__':
         print(f'Justesse de validation: {rf_classifier.get_validation_accuracy():%}')
     elif method == 'adaboost':
         pass
+    elif method == 'naive_bayes':
+        nb_classifier = NBClassifer(train, labels, test, test_ids, classes)
+        nb_classifier.search_hyperparameters()
+        nb_classifier.train()
+        print(f'Justesse d\'entrainement: {nb_classifier.get_training_accuracy():.2%}')
+        print(f'Justesse de validation: {nb_classifier.get_validation_accuracy():.2%}')
     elif method == 'linear_discriminant_analysis':
         lda_classifier = LDAClassifer(train, labels, test, test_ids, classes)
+        lda_classifier.search_hyperparameters()
         lda_classifier.train()
-        print(f'Justesse d\'entrainement: {lda_classifier.get_training_accuracy():%}')
-        print(f'Justesse de validation: {lda_classifier.get_validation_accuracy():%}')
-        print(f'Prédiction: {lda_classifier.predict(test)}')
-        print(f'Prediction en texte: {lda_classifier.predict(test, text_predictions=True)}')
+        print(f'Justesse d\'entrainement: {lda_classifier.get_training_accuracy():.2%}')
+        print(f'Justesse de validation: {lda_classifier.get_validation_accuracy():.2%}')
     elif method == 'all':
         pass
     else:

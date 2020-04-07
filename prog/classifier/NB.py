@@ -1,12 +1,12 @@
 import sklearn
 import numpy as np
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+# from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import GridSearchCV
+from sklearn.naive_bayes import GaussianNB
 
-
-class LDAClassifer():
-    """Classificateur - Analyse du Discriminante Linéaire
+class NBClassifer():
+    """Classificateur - Bayes Naif
     """
     def __init__(self, train, labels, test, test_ids, classes):
         """
@@ -16,21 +16,21 @@ class LDAClassifer():
         :param test_ids: id de la dataframe de test pour le jeu de données leaf-classification
         :param classes: noms des espèces végétales
         """
-        self.name = LinearDiscriminantAnalysis.__name__
-
+        self.name = GaussianNB.__name__
         self._train = train
         self._test = test
         self._labels = labels
         self._test_ids = test_ids
         self._classes = np.array(classes)
 
-        # "Single value decomposition" ne calcul pas de matrice de covariance, ce qui est bon
-        # en l'occurence vu le grand nombre de dimensions
-        self._classifier = LinearDiscriminantAnalysis()
+        self._hyperparameters = np.zeros(3, dtype='<U5')
+
+        self._classifier = GaussianNB()
         self._X_train, self._Y_train, self._X_test, self._Y_test = self._split_data()
 
         self._best_model = None
         self._best_pair = None
+
 
     def _split_data(self):
         """
@@ -46,7 +46,7 @@ class LDAClassifer():
             X_train, X_test = self._train.values[train_i], self._train.values[test_i]
             Y_train, Y_test = self._labels[train_i], self._labels[test_i]
 
-        return X_train, Y_train, X_test, Y_test
+        return np.array([X_train, Y_train, X_test, Y_test])
 
     def train(self):
         """
@@ -68,14 +68,14 @@ class LDAClassifer():
 
     def get_validation_accuracy(self):
         """validation accuracy
-        :return: La justesse d'entrainement
+        :return: La justesse de validation
         """
         prediction = self.predict(self._X_test)
-        return sklearn.metrics.accuracy_score(self._Y_test, prediction)
+        return sklearn.metrics.accuracy_score( self._Y_test, prediction)
 
     def get_training_accuracy(self):
-        """validation accuracy
-        :return: La justesse de validation
+        """training accuracy
+        :return: La justesse d'entrainement
         """
         prediction = self.predict(self._X_train)
         return sklearn.metrics.accuracy_score( self._Y_train, prediction)
@@ -86,12 +86,7 @@ class LDAClassifer():
 -       les meilleurs hyper-paramètres trouvés dans self._best_pair
         :return:
         """
-        _solvers = ['svd', 'lsqr', 'eigen']
-        _components = np.int_(np.ceil(np.linspace(self._classes.shape[0] - 10, self._classes.shape[0] - 1)))
-        _tolerances = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]
-        param_grid = {'solver': ['svd', 'lsqr', 'eigen'],
-                      'n_components': np.int_(np.ceil(np.linspace(self._classes.shape[0] - 10, self._classes.shape[0] - 1))),
-                      'tol': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]}
+        param_grid = {'var_smoothing': [1e-11, 1e-10, 1e-09, 1e-08, 1e-07, 1e-06, 1e-04, 1e-3]}
         grid = GridSearchCV(self._classifier, param_grid, scoring='accuracy', n_jobs=-1, verbose=1)
         grid.fit(self._X_train, self._Y_train)
 
