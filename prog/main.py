@@ -11,8 +11,9 @@ from classifier.NB import NB
 from classifier.LDA import LDA
 from classifier.RF import RF
 from classifier.MLP import MLP
+from classifier.SVM import SVM
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import StratifiedShuffleSplit
+
 
 
 def argument_parser():
@@ -64,7 +65,11 @@ if __name__ == '__main__':
     elif method == 'regression':
         pass
     elif method == 'SVM':
-        pass
+        svm_classifier = SVM(train, labels, test, test_ids, classes)
+        svm_classifier.hyperparam_search()
+        svm_classifier.train()
+        print(f'Justesse d\'entrainement: {svm_classifier.get_training_accuracy():%}')
+        print(f'Justesse de validation: {svm_classifier.get_validation_accuracy():%}')
     elif method == 'randomforest':
         rf_classifier = RF(train, labels, test, test_ids, classes)
         rf_classifier.hyperparam_search()
