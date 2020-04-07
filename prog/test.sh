@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Test script for IFT712 TP2
-# GGS - 20/02/2020
+# Test script for IFT712 - Classifieur de feuilles
+# GGS - 7/04/2020
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
