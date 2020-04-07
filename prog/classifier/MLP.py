@@ -1,26 +1,23 @@
 from sklearn.neural_network import MLPClassifier
+from classifier.classifier import Classifier
 
-class MLP():
-    def __init__(self, train, test, labels, test_ids, classes):
-        self.best_pair = None
-        self.best_model = None
-        self.train = train
-        self.test = test
-        self.labels = labels
-        self.test_ids = test_ids
-        self.classes = classes
-    
-    def hyperparamSearch(self, k=5, hiddens=[(20,)], learning_rates=[1e-3]):
-        '''
-            takes the current classifier and try to find the best learning rate and solver pair with a k-fold algorithm.
-        '''
-        for hl in hiddens:
-            for lr in learning_rates:
-                for optim in ['sgd','adam']:
-                    model = MLPClassifier(hl, learning_rate_init=lr, solver=optim)
-                    fit_model = model.fit(self.train, self.labels)
 
-                    pred = fit_model.predict(self.test)
-
-                    
-
+class MLP(Classifier):
+    """
+    Classificateur - MultiLayer Perceptron
+    """
+    def __init__(self, train, labels, test, test_ids, classes):
+        """
+        :param train: Jeu d'entrainement, sera subdivisé pour valider l'entrainement
+        :param labels: annotations
+        :param test: Données à classifier
+        :param test_ids: id de la dataframe de test pour le jeu de données leaf-classification
+        :param classes: noms des espèces végétales
+        """
+        Classifier.__init__(self, train, labels, test, test_ids, classes)
+        self.name = MLPClassifier.__name__
+        self._classifier = MLPClassifier()
+        self._param_grid = {'hidden_layer_sizes': [(50,), (80,), (100,)],
+                            'learning_rate_init': [1e-1, 1e-2],
+                            'solver': ['adam'],
+                            'activation': ['relu', 'logistic']}
