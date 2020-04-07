@@ -136,3 +136,16 @@ dmypy.json
 *.csv
 
 .idea/
+
+rapport/*.aux
+rapport/*.bib
+rapport/*.bst
+rapport/*.pdf
+rapport/*.log
+rapport/*.nlo
+rapport/*.lof
+rapport/*.loc
+rapport/*.lot
+rapport/*.toc
+rapport/*.synctex.gz
+rapport/*.out

@@ -1,0 +1,67 @@
+\section{Entraînement}
+\subsubsection{Recherche des hyperparamètres}
+
+\begin{table}[H]
+    \centering
+    \caption{Résultats de la recherche des hyperparamètres du modèle A - Tunnel}
+    \label{tab:resultat_tunnel_modele_a}
+    \begin{tabular}{lllp{3cm}p{3cm}l}
+        \midrule
+        \# & \(N_A\) & \(N_B\) & Augmentation des données & Métrique de validation & Époque\\
+        \midrule\midrule
+        1  & 2 & 2 & Non & 0,812 & 10\\
+        2  & 2 & 2 & Oui & \\
+        3  & 2 & 3 & Non & 0,614 & 1\\
+        4  & 2 & 3 & Oui & 0,791 & 7\\
+        5  & 4 & 2 & Non & 0,933 & 7\\
+        6  & 4 & 2 & Oui & 0,932 & 10\\
+        7  & 4 & 3 & Non & 0,930 & 7\\
+        \textbf{8}  & \textbf{4} & \textbf{3} & \textbf{Oui} & \textbf{0,936} & \textbf{10}\\
+        9  & 8 & 2 & Non & 0,934 & 4\\
+        10 & 8 & 2 & Oui & 0,935 & 10\\
+        \midrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Résultats de la recherche des hyperparamètres du modèle B - Tunnel}
+    \label{tab:resultat_tunnel_modele_b}
+    \begin{tabular}{lllp{3cm}p{3cm}l}
+        \midrule
+        \# & \(N_A\) & \(N_B\) & Augmentation des données & Métrique de validation & Époque\\
+        \midrule\midrule
+        1  & 2 & 2 & Non & 0,612 & 9\\
+        2  & 2 & 2 & Oui & 0,673 & 10\\
+        3  & 2 & 3 & Non & 0,634 & 1\\
+        4  & 2 & 3 & Oui & 0,673 & 6\\
+        5  & 4 & 2 & Non & 0,613 & 6\\
+        \textbf{6}  & \textbf{4} & \textbf{2} & \textbf{Oui} & \textbf{0,673} & \textbf{2}\\
+        7  & 4 & 3 & Non & 0,621 & 4\\
+        8  & 4 & 3 & Oui & 0,672 & 9\\
+        9  & 8 & 2 & Non & 0,632 & 2\\
+        10 & 8 & 2 & Oui & 0,672 & 6\\
+        \midrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Résultats de la recherche des hyperparamètres du modèle E - Tunnel}
+    \label{tab:resultat_tunnel_modele_e}
+    \begin{tabular}{lp{3cm}p{3cm}p{3cm}l}
+        \midrule
+        \# & Entraînement du \text{backend} & Augmentation des données & Métrique de validation & Époque\\
+        \midrule\midrule
+        \textbf{1} & \textbf{Non} & \textbf{Non} & \textbf{0,931} & \textbf{10}\\
+        2 & Non & Oui & 0,926 & 9\\
+        3 & Oui & Non & 0,500 & 8\\
+        4 & Oui & Oui & 0,500 & 8\\
+        \midrule
+    \end{tabular}
+\end{table}
+    
+\section{Résultats}
+
+
+\subsubsection{Comparaison entre les modèles}
