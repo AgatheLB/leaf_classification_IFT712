@@ -9,8 +9,11 @@ import matplotlib.pyplot as plt
 from zipfile import ZipFile
 from classifier import *
 from classifier.LDA import LDAClassifer
+from classifier.RF import RF
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
+
+
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
@@ -48,7 +51,7 @@ def createDataSets():
     return train, labels, test, test_ids, classes
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = argument_parser()
     method = args.method
 
@@ -63,7 +66,11 @@ if __name__ == "__main__":
     elif method == 'SVM':
         pass
     elif method == 'randomforest':
-        pass
+        rf_classifier = RF(train, labels, test, test_ids, classes)
+        rf_classifier.hyperparam_search()
+        rf_classifier.train()
+        print(f'Justesse d\'entrainement: {rf_classifier.get_training_accuracy():%}')
+        print(f'Justesse de validation: {rf_classifier.get_validation_accuracy():%}')
     elif method == 'adaboost':
         pass
     elif method == 'linear_discriminant_analysis':
