@@ -69,18 +69,20 @@ if __name__ == "__main__":
     elif method == 'naive_bayes':
         nb_classifier = NBClassifer(train, labels, test, test_ids, classes)
         nb_classifier.search_hyperparameters()
-        print(f'Justesse d\'entrainement: {nb_classifier.get_training_accuracy():%}')
-        print(f'Justesse de validation: {nb_classifier.get_validation_accuracy():%}')
-        print(f'Prédiction: {nb_classifier.predict(test)}')
-        print(f'Prediction en texte: {nb_classifier.predict(test, text_predictions=True)}')
+        nb_classifier.train()
+        print(f'Justesse d\'entrainement: {nb_classifier.get_training_accuracy():.2%}')
+        print(f'Justesse de validation: {nb_classifier.get_validation_accuracy():.2%}')
+        # print(f'Prédiction: {nb_classifier.predict(test)}')
+        # print(f'Prediction en texte: {nb_classifier.predict(test, text_predictions=True)}')
         pass
     elif method == 'linear_discriminant_analysis':
         lda_classifier = LDAClassifer(train, labels, test, test_ids, classes)
         lda_classifier.search_hyperparameters()
-        print(f'Justesse d\'entrainement: {lda_classifier.get_training_accuracy():%}')
-        print(f'Justesse de validation: {lda_classifier.get_validation_accuracy():%}')
-        print(f'Prédiction: {lda_classifier.predict(test)}')
-        print(f'Prediction en texte: {lda_classifier.predict(test, text_predictions=True)}')
+        lda_classifier.train()
+        print(f'Justesse d\'entrainement: {lda_classifier.get_training_accuracy():.2%}')
+        print(f'Justesse de validation: {lda_classifier.get_validation_accuracy():.2%}')
+        # print(f'Prédiction: {lda_classifier.predict(test)}')
+        # print(f'Prediction en texte: {lda_classifier.predict(test, text_predictions=True)}')
     elif method == 'all':
         pass
     else:

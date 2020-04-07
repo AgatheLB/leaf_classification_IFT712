@@ -2,6 +2,7 @@ import sklearn
 import numpy as np
 # from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import GaussianNB
 
 class NBClassifer():
@@ -25,7 +26,10 @@ class NBClassifer():
         self._hyperparameters = np.zeros(3, dtype='<U5')
 
         self._classifier = GaussianNB()
-        self._splitted_data = self._split_data()
+        self._X_train, self._Y_train, self._X_test, self._Y_test = self._split_data()
+
+        self._best_model = None
+        self._best_pair = None
 
 
     def _split_data(self):
@@ -48,7 +52,8 @@ class NBClassifer():
         """
         Entraine le modèle avec les jeux de données fournis à l'instanciation
         """
-        self._classifier.fit(self._splitted_data[0], self._splitted_data[1])
+        self._classifier.set_params(**self._best_pair)
+        self._classifier.fit(self._X_train, self._Y_train)
 
     def predict(self, x_predict, text_predictions=False):
         """predict
@@ -62,36 +67,30 @@ class NBClassifer():
             return self._classifier.predict(x_predict)
 
     def get_validation_accuracy(self):
-        """validation
-        :return: La justesse d'entrainement
+        """validation accuracy
+        :return: La justesse de validation
         """
-        prediction = self.predict(self._splitted_data[2])
-        return sklearn.metrics.accuracy_score( self._splitted_data[3], prediction)
+        prediction = self.predict(self._X_test)
+        return sklearn.metrics.accuracy_score( self._Y_test, prediction)
 
     def get_training_accuracy(self):
-        """validation
+        """training accuracy
         :return: La justesse d'entrainement
         """
-        prediction = self.predict(self._splitted_data[0])
-        return sklearn.metrics.accuracy_score( self._splitted_data[1], prediction)
+        prediction = self.predict(self._X_train)
+        return sklearn.metrics.accuracy_score( self._Y_train, prediction)
 
     def search_hyperparameters(self):
-        variance_smoothing = [1e-11, 1e-10, 1e-09, 1e-08, 1e-07, 1e-06, 1e-04, 1e-3]
-        _max_score = -np.inf
-        _counter = 0
-        _hyperparameters = 0
-        for var_smoothing in variance_smoothing:
-            self._classifier = GaussianNB(var_smoothing=var_smoothing)
-            self.train()
-            _score = self.get_validation_accuracy()
-            if _score > _max_score:
-                _max_score = _score
-                _hyperparameters = var_smoothing
-                print(f'hyperparameters updated - variance smoothing: {var_smoothing}')
-            _counter += 1
-            print(f'Searching hyperparameters for {self.name}, iteration: '
-                  f'{_counter}/{len(variance_smoothing)} '
-                  f'score: {_score:%}, max score: {_max_score:%}')
+        """
+        Entreprend une recherche d'hyper-paramètres. Le meilleur modèle trouvé est sauvegardé dans self._best_model et
+-       les meilleurs hyper-paramètres trouvés dans self._best_pair
+        :return:
+        """
+        param_grid = {'var_smoothing': [1e-11, 1e-10, 1e-09, 1e-08, 1e-07, 1e-06, 1e-04, 1e-3]}
+        grid = GridSearchCV(self._classifier, param_grid, scoring='accuracy', n_jobs=-1, verbose=1)
+        grid.fit(self._X_train, self._Y_train)
 
-        self._classifier = GaussianNB(var_smoothing=_hyperparameters)
-        self.train()
+        self._best_model = grid
+        self._best_pair = grid.best_params_
+        print(f'Meilleurs paramètres trouvés pour {self.name} sont {self._best_pair} pour une justesse de '
+              f'{grid.best_score_:.2%}')
