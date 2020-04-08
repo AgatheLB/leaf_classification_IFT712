@@ -12,6 +12,7 @@ from classifier.LDA import LDA
 from classifier.RF import RF
 from classifier.MLP import MLP
 from classifier.SVM import SVM
+from classifier.KNN import KNN
 from sklearn.preprocessing import LabelEncoder
 
 
@@ -19,7 +20,9 @@ from sklearn.preprocessing import LabelEncoder
 def argument_parser():
     parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
     parser.add_argument('--method', type=str, default='MLP',
-                         help='Permet d utiliser la methode specifie ou bien tous les faire.', choices=['MLP','regression','SVM','randomforest','naive_bayes', 'linear_discriminant_analysis', 'all'])
+                        help='Permet d utiliser la methode specifie ou bien tous les faire.',
+                        choices=['MLP','regression','SVM','randomforest','naive_bayes','linear_discriminant_analysis',
+                                 'KNN', 'all'])
     parser.add_argument('--hidden_layer', type=tuple, default=(20,))
     return parser.parse_args()
 
@@ -68,6 +71,8 @@ if __name__ == '__main__':
         classifier = RF(train, labels, test, test_ids, classes)
     elif method == 'adaboost':
         pass
+    elif method == 'KNN':
+        classifier = KNN(train, labels, test, test_ids, classes)
     elif method == 'naive_bayes':
         classifier = NB(train, labels, test, test_ids, classes)
     elif method == 'linear_discriminant_analysis':
