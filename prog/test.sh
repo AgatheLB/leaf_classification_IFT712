@@ -13,7 +13,7 @@ then
     rm $log_file
 fi
 
-for method in 'MLP' 'regression' 'SVM' 'randomforest' 'naive_bayes' 'linear_discriminant_analysis' 'all'
+for method in 'MLP' 'regression' 'SVM' 'randomforest' 'naive_bayes' 'linear_discriminant_analysis' 'KNN' 'all'
 do
    printf "${GREEN}"
    printf "=== ${method} ===\n" | tee -a $log_file
