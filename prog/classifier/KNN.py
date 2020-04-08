@@ -15,7 +15,7 @@ class KNN(Classifier):
         :param test_ids: id de la dataframe de test pour le jeu de données leaf-classification
         :param classes: noms des espèces végétales
         """
-        Classifier.__init__(self, train, labels, test, test_ids, classes)
+        super(KNN, self).__init__(train, labels, test, test_ids, classes)
         self.name = KNeighborsClassifier.__name__
         self._classifier = KNeighborsClassifier()
         self._param_grid = {'n_neighbors': [1, 2, 3, 4, 5],

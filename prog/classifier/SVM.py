@@ -15,7 +15,7 @@ class SVM(Classifier):
         :param test_ids: id de la dataframe de test pour le jeu de données leaf-classification
         :param classes: noms des espèces végétales
         """
-        Classifier.__init__(self, train, labels, test, test_ids, classes)
+        super(SVM, self).__init__(train, labels, test, test_ids, classes)
         self.name = SVC.__name__
         self._classifier = SVC()
         self._param_grid = {'C': [1e3, 5e3, 1e4, 5e4, 1e5],

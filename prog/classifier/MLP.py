@@ -14,7 +14,7 @@ class MLP(Classifier):
         :param test_ids: id de la dataframe de test pour le jeu de données leaf-classification
         :param classes: noms des espèces végétales
         """
-        Classifier.__init__(self, train, labels, test, test_ids, classes)
+        super(MLP, self).__init__(train, labels, test, test_ids, classes)
         self.name = MLPClassifier.__name__
         self._classifier = MLPClassifier()
         self._param_grid = {'hidden_layer_sizes': [(50,), (80,), (100,)],

@@ -16,7 +16,7 @@ class LDA(Classifier):
         :param test_ids: id de la dataframe de test pour le jeu de données leaf-classification
         :param classes: noms des espèces végétales
         """
-        Classifier.__init__(self, train, labels, test, test_ids, classes)
+        super(LDA, self).__init__(train, labels, test, test_ids, classes)
         self.name = LinearDiscriminantAnalysis.__name__
         self._classifier = LinearDiscriminantAnalysis()
         self._param_grid = {'solver': ['svd', 'lsqr', 'eigen'],
