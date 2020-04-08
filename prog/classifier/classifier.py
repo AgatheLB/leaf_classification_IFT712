@@ -48,7 +48,7 @@ class Classifier:
         self._best_model = grid
         self._best_pair = grid.best_params_
         print(f'Meilleurs paramètres trouvés pour {self.name} sont {self._best_pair} pour une justesse de '
-              f'{grid.best_score_}')
+              f'{grid.best_score_:.2%}')
 
     def train(self):
         """
