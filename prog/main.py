@@ -78,9 +78,16 @@ if __name__ == '__main__':
     elif method == 'linear_discriminant_analysis':
         classifier = LDA(train, labels, test, test_ids, classes)
     elif method == 'all':
-        pass
+        classifiers = [MLP, SVM, RF, KNN, NB, LDA]
+        for clf in classifiers:
+            classifier = clf(train, labels, test, test_ids, classes)
+            classifier.search_hyperparameters()
+            classifier.train()
+            classifier.display_accuracies()
     else:
         raise Exception('not a valid method')
-    classifier.search_hyperparameters()
-    classifier.train()
-    classifier.display_accuracies()
+
+    if method != "all":
+        classifier.search_hyperparameters()
+        classifier.train()
+        classifier.display_accuracies()
