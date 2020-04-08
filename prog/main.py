@@ -13,9 +13,8 @@ from classifier.RF import RF
 from classifier.MLP import MLP
 from classifier.SVM import SVM
 from classifier.KNN import KNN
+from classifier.Regression import Regression
 from sklearn.preprocessing import LabelEncoder
-
-
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
@@ -46,7 +45,7 @@ def createDataSets():
 
     data = LabelEncoder().fit(train.species)
     labels = data.transform(train.species)
-    classes = list(data.classes_)
+    classes = np.array(data.classes_)
     test_ids = test.id
 
     train = train.drop(['species','id'], axis=1)
@@ -60,34 +59,40 @@ if __name__ == '__main__':
     method = args.method
 
     train, labels, test, test_ids, classes = createDataSets()
+    classifiers = []
 
     if method == 'MLP':
-        classifier = MLP(train, labels, test, test_ids, classes)
+        clf = MLP(train, labels, test, test_ids, classes)
+        classifiers.append(clf)
     elif method == 'regression':
-        pass
+        clf = Regression(train, labels, test, test_ids, classes)
+        classifiers.append(clf)
     elif method == 'SVM':
-        classifier = SVM(train, labels, test, test_ids, classes)
+        clf = SVM(train, labels, test, test_ids, classes)
+        classifiers.append(clf)
     elif method == 'randomforest':
-        classifier = RF(train, labels, test, test_ids, classes)
+        clf = RF(train, labels, test, test_ids, classes)
+        classifiers.append(clf)
     elif method == 'adaboost':
         pass
     elif method == 'KNN':
-        classifier = KNN(train, labels, test, test_ids, classes)
+        clf = KNN(train, labels, test, test_ids, classes)
+        classifiers.append(clf)
     elif method == 'naive_bayes':
-        classifier = NB(train, labels, test, test_ids, classes)
+        clf = NB(train, labels, test, test_ids, classes)
+        classifiers.append(clf)
     elif method == 'linear_discriminant_analysis':
-        classifier = LDA(train, labels, test, test_ids, classes)
+        clf = LDA(train, labels, test, test_ids, classes)
+        classifiers.append(clf)
     elif method == 'all':
-        classifiers = [MLP, SVM, RF, KNN, NB, LDA]
-        for clf in classifiers:
+        clfs = [MLP, SVM, RF, KNN, NB, LDA]
+        for clf in clfs:
             classifier = clf(train, labels, test, test_ids, classes)
-            classifier.search_hyperparameters()
-            classifier.train()
-            classifier.display_accuracies()
+            classifiers.append(classifiers)
     else:
         raise Exception('not a valid method')
 
-    if method != "all":
-        classifier.search_hyperparameters()
-        classifier.train()
-        classifier.display_accuracies()
+    for c in classifiers:
+        c.search_hyperparameters()
+        c.train()
+        c.display_accuracies()
