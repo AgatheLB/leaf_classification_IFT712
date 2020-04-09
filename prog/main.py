@@ -26,7 +26,16 @@ def argument_parser():
     return parser.parse_args()
 
 def createDataSets():
-    #Downloading leaf dataset from kaggle if not found.
+    """
+    Fonction permettant de télécharger l'ensemble de donnée leaf-classification du
+    site web de Kaggle et de créer un ensemble de données d'entrainement et de validation
+
+    return: train: ensemble de données pour l'entrainement Nx3x64
+    return: labels: vecteur N x 1 contenant le numero de classe de feuille.
+    return: test: ensemble de données pour la validation Nx3x64
+    return: test_id: ensemble des identifiants des individus dans l'ensemble test
+    return: classes: ensemble de toutes les classes possibles Cx1
+    """
     if not os.path.exists('data/train.csv'):
         os.chdir('./data')
         os.system('kaggle competitions download -c leaf-classification')
@@ -73,8 +82,6 @@ if __name__ == '__main__':
     elif method == 'randomforest':
         clf = RF(train, labels, test, test_ids, classes)
         classifiers.append(clf)
-    elif method == 'adaboost':
-        pass
     elif method == 'KNN':
         clf = KNN(train, labels, test, test_ids, classes)
         classifiers.append(clf)

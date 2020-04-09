@@ -5,6 +5,10 @@ from sklearn.metrics import accuracy_score
 
 
 class Classifier:
+    """
+    Classe parente pour différent Classificateur. Elle implemente les fonctions recherche d'hyperparamètre, d'entrainement
+    et des fonctions de présentation des résultats.
+    """
     def __init__(self, train, labels, test, test_ids, classes):
         """
         :param train: Jeu d'entrainement, sera subdivisé pour valider l'entrainement
