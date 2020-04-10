@@ -3,6 +3,9 @@ Ce projet a pour but de présenter différentes méthodes de classification dans
 
 Ce projet vise également à mettre en application des méthodes de cross-validation et de recherche d'hyper-paramètres dans le but de déterminer les modèles de classification les plus performants. 
 \section{Définition du projet}
+Ce présent projet classifie un ensemble de feuille, composé d'information extrait de 1584 images de feuille, selon des caractéristiques physiques. Les caractéristique, soit la marge à échelle précise, la forme et la texture des feuilles de l'ensemble, sont des vecteurs 3x64.
+
+Nous avons développer un gestionnaire qui choisi un classificateur spécifique ou bien l'ensemble de 7 classificateur. Ce gestionnaire permet, une fois le ou les classificateurs choisis, de faire une recherche d'hyper-paramètres, d'entrainer un ou plusieurs modèle et de générer les informations sur la performance du ou des modèles. 
     \label{sec:definition_projet}
     
     \pagebreak
