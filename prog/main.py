@@ -1,29 +1,35 @@
-'''
+"""
 Pour le fonctionnement du package kaggle, https://github.com/Kaggle/kaggle-api
-'''
+"""
 
-import sklearn, argparse, os, kaggle, glob, pandas
-import numpy as np
-import matplotlib.pyplot as plt
-
+import argparse
+import glob
+import os
+import pandas
 from zipfile import ZipFile
-from classifier.NB import NB
-from classifier.LDA import LDA
-from classifier.RF import RF
-from classifier.MLP import MLP
-from classifier.SVM import SVM
+
+import numpy as np
 from classifier.KNN import KNN
+from classifier.LDA import LDA
+from classifier.MLP import MLP
+from classifier.NB import NB
+from classifier.RF import RF
 from classifier.Regression import Regression
+from classifier.SVM import SVM
 from sklearn.preprocessing import LabelEncoder
 
+
 def argument_parser():
-    parser = argparse.ArgumentParser(description='Classification de feuille d arbre utilisant 6 methode de classification differentes.')
+    parser = argparse.ArgumentParser(
+        description='Classification de feuilles d arbre utilisant 6 methode de classification differentes.')
     parser.add_argument('--method', type=str, default='MLP',
                         help='Permet d utiliser la methode specifie ou bien tous les faire.',
-                        choices=['MLP','regression','SVM','randomforest','naive_bayes','linear_discriminant_analysis',
+                        choices=['MLP', 'regression', 'SVM', 'randomforest', 'naive_bayes',
+                                 'linear_discriminant_analysis',
                                  'KNN', 'all'])
     parser.add_argument('--hidden_layer', type=tuple, default=(20,))
     return parser.parse_args()
+
 
 def createDataSets():
     """
@@ -39,11 +45,11 @@ def createDataSets():
     if not os.path.exists('data/train.csv'):
         os.chdir('./data')
         os.system('kaggle competitions download -c leaf-classification')
-        with ZipFile('leaf-classification.zip','r') as zipObj:
+        with ZipFile('leaf-classification.zip', 'r') as zipObj:
             zipObj.extractall()
-        with ZipFile('train.csv.zip','r') as zipObj:
+        with ZipFile('train.csv.zip', 'r') as zipObj:
             zipObj.extractall()
-        with ZipFile('test.csv.zip','r') as zipObj:
+        with ZipFile('test.csv.zip', 'r') as zipObj:
             zipObj.extractall()
         for f in glob.glob('*.zip'):
             os.remove(f)
@@ -57,7 +63,7 @@ def createDataSets():
     classes = np.array(data.classes_)
     test_ids = test.id
 
-    train = train.drop(['species','id'], axis=1)
+    train = train.drop(['species', 'id'], axis=1)
     test = test.drop(['id'], axis=1)
 
     return train, labels, test, test_ids, classes
@@ -95,7 +101,7 @@ if __name__ == '__main__':
         clfs = [MLP, SVM, RF, KNN, NB, LDA]
         for clf in clfs:
             classifier = clf(train, labels, test, test_ids, classes)
-            classifiers.append(classifiers)
+            classifiers.append(classifier)
     else:
         raise Exception('not a valid method')
 

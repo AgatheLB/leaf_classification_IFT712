@@ -4,16 +4,16 @@ from classifier.classifier import Classifier
 
 class KNN(Classifier):
     """
-    Classificateur - Plus proche voisin
+    Classificateur - K plus proches voisins
     """
 
     def __init__(self, train, labels, test, test_ids, classes):
         """
         :param train: Jeu d'entrainement, sera subdivisé pour valider l'entrainement
-        :param labels: annotations
+        :param labels: Annotations
         :param test: Données à classifier
-        :param test_ids: id de la dataframe de test pour le jeu de données leaf-classification
-        :param classes: noms des espèces végétales
+        :param test_ids: Id de la dataframe de test pour le jeu de données leaf-classification
+        :param classes: Noms des espèces végétales
         """
         super(KNN, self).__init__(train, labels, test, test_ids, classes)
         self.name = KNeighborsClassifier.__name__
