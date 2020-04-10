@@ -6,8 +6,8 @@ from sklearn.metrics import accuracy_score
 
 class Classifier:
     """
-    Classe parente pour différent Classificateur. Elle implemente les fonctions recherche d'hyperparamètre, d'entrainement
-    et des fonctions de présentation des résultats.
+    Classe parente pour les différents classifieurs. Elle implemente les fonctions de recherche d'hyper-paramètres,
+    d'entraînement et des fonctions de présentation des résultats.
     """
     def __init__(self, train, labels, test, test_ids, classes):
         """
@@ -26,6 +26,7 @@ class Classifier:
         self._X_train, self._y_train, self._X_valid, self._y_valid = self._split_data()
 
         self._best_model = None
+        self._best_score = None
         self._best_pair = None
 
     def _split_data(self):
@@ -43,39 +44,37 @@ class Classifier:
 
     def search_hyperparameters(self):
         """
-        Entreprend une recherche d'hyper-paramètres. Le meilleur modèle trouvé est sauvegardé dans self._best_model et
-        les meilleurs hyper-paramètres trouvés dans self._best_pair
+        Entreprend une recherche d'hyper-paramètres. Le meilleur modèle entraîné trouvé est sauvegardé dans
+        self._best_model et les meilleurs hyper-paramètres trouvés dans self._best_pair.
         """
         grid = GridSearchCV(self._classifier, self._param_grid, scoring='accuracy', n_jobs=-1, verbose=1)
         grid.fit(self._X_train, self._y_train)
 
-        self._best_model = grid
+        self._best_model = grid.best_estimator_
+        self._best_score = grid.best_score_
         self._best_pair = grid.best_params_
-        print(f'Meilleurs paramètres trouvés pour {self.name} sont {self._best_pair} pour une justesse de '
-              f'{grid.best_score_:.2%}')
+        print(f'Meilleurs paramètres trouvés pour {self.name} sont {self._best_pair} pour une justesse '
+              f'de {self._best_score:.2%}')
 
     def train(self):
         """
         Entraîne le modèle avec le jeu de données fournis à l'instanciation
         """
-        self._classifier.set_params(**self._best_pair)
-        self._classifier.fit(self._X_train, self._y_train)
-
-        print(f'{self.name} trained avec les paramètres {self._best_pair}')
+        self._best_model.fit(self._X_train, self._y_train)
 
     def get_training_accuracy(self):
         """
         Calcule la justesse d'entraînement
         :return: La justesse d'entrainement
         """
-        return accuracy_score(self._y_train, self._classifier.predict(self._X_train))
+        return accuracy_score(self._y_train, self._best_model.predict(self._X_train))
 
     def get_validation_accuracy(self):
         """
         Calcule la justesse de validation
         :return: La justesse de validation
         """
-        return accuracy_score(self._y_valid, self._classifier.predict(self._X_valid))
+        return accuracy_score(self._y_valid, self._best_model.predict(self._X_valid))
 
     def display_accuracies(self):
         print(f'Justesse d\'entrainement: {self.get_training_accuracy():.2%}')
