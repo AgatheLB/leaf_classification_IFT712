@@ -1,6 +1,4 @@
-\section{Entraînement}
-
-\subsection{Recherche des hyperparamètres}
+\section{Recherche des hyperparamètres}
 Afin de déterminer les hyper-paramètres menant à des performances maximales des modèles de classification (meilleure justesse d'entraînement et de validation), nous avons décidé d'utiliser une méthode de validation croisée. 
 
 Pour cela, nous avons pu la méthode Sklearn \emph{model\_selection.GridSearchCV}, qui prend en paramètre un estimateur (notre modèle de classification), un espace de paramètres à tester, une fonction d'évalutation (dans notre cas, la justesse).
@@ -49,12 +47,19 @@ On s'intéresse maintenant aux hyper-paramètres des différents modèles pour n
 	\item \textbf{Gamma}: Valeur du coefficient utilisé par le noyau, spécifiquement pour les noyaux \emph{poly}, \emph{rbf} et \emph{sigmoid}.
 \end{itemize}
 
-\subsection{}
-Grâce à la recherche d'hyperparamètres de la méthode \emph{GridSearchCV}, nous pouvons présenter les valeurs des hyper-paramètres présentant les meilleurs scores de justesse. 
+\subsubsection*{Régresseur Ridge}
+\begin{itemize}
+	\item \textbf{Paramètre de régularisarion alpha}: Valeur déterminant la force de régularisation permettant de réduire la variance du modèle.
+\end{itemize}
+
+\newpage
 \section{Résultats}
+Les résultats de la recherche des hyper-paramètres ont permis de déterminer, dans un premier temps, les valeurs et choix des hyper-paramètres résultant des scores de justesse les plus élevés pour chacun des modèles. 
+Aussi, nous avons pu déterminer des scores de justesse sur un jeu de données de validation afin de s'assurer que les modèle généralisaient correctement. 
+
 \begin{table}[H]
 	\centering
-	\caption{Présentation des scores de justesse des modèles selon leurs hyperparamètres amenant à des résultats les plus performants}
+	\caption{Présentation des scores de justesse les plus performants des modèles}
 	\label{tab:accuracies_models}
 	\begin{tabular}{lllp{3cm}p{3cm}l}
 		\midrule
@@ -70,4 +75,53 @@ Grâce à la recherche d'hyperparamètres de la méthode \emph{GridSearchCV}, no
 		\midrule
 	\end{tabular}
 \end{table}
+
+Ces résultats ont été établis selon les choix et valeurs des hyper-paramètres suivants:
+\subsubsection*{Perceptron MultiCouches}
+\begin{itemize}
+	\item \textbf{Taille des couches cachées}: $50$
+	\item \textbf{Initialisation des taux d'apprentissage}: $0.1$
+	\item \textbf{Algorithme d'optimisation}: \emph{adam}
+	\item \textbf{Fonction d'activation}: \emph{logistic}
+\end{itemize}
+
+\subsubsection*{K-Plus Proches Voisins}
+\begin{itemize}
+	\item \textbf{Nombre de voisins}: $1$
+	\item \textbf{Poids}: \emph{uniform}
+	\item \textbf{Algorithme}: \emph{ball\_tree}
+	\item \textbf{Taille des feuilles}: $10$
+	\item \textbf{Puissance p}: $1$
+\end{itemize}
+
+\subsubsection*{Analyse du Discriminant Linéaire}
+\begin{itemize}
+	\item \textbf{Algorithme}: \emph{svd}
+	\item \textbf{Nombre de composants}: $89$
+	\item \textbf{Seuil}: $0.1$
+\end{itemize}
+
+\subsubsection*{Bayes naïf gaussienne}
+\begin{itemize}
+	\item \textbf{Lissage des variables}: $0.001$
+\end{itemize}
+
+\subsubsection*{Forêts aléatoires}
+\begin{itemize}
+	\item \textbf{Nombre d'estimateurs}: $450$
+	\item \textbf{Profondeur maximale}: $30$
+\end{itemize}
+
+\subsubsection*{Machine à vecteur de support}
+\begin{itemize}
+	\item \textbf{Paramètre de régularisarion C}: $1000$
+	\item \textbf{Noyau}: \emph{rbf}
+	\item \textbf{Gamma}: $0.1$
+\end{itemize}
+
+\subsubsection*{Régresseur Ridge}
+\begin{itemize}
+	\item \textbf{Paramètre de régularisarion alpha}: $0.001$
+\end{itemize}
+
 

@@ -9,7 +9,7 @@ La classification basée sur les voisins n'a pas comme but d'être la méthode l
 Nous avons décidé de tester la méthode des K-Plus Proches Voisins, implémentés par Sklearn avec neighbors.KNeighborsClassifier.
 
 \subsubsection*{Analyse du Discriminant Linéaire}
-L'essai sur notre jeu de données d'entraînement de la méthode de l'analyse du discriminant linéaire permet de s'informer si ce jeu de données est effectivement bien linéairement séparable. Ce type de classification, étant de type \textcolor{red}{closed-form}, démontre son efficacité lors de la phase d'entraînement. La méthode est implémentée par Sklearn sous la librairie \emph{discriminant\_analysis.LinearDiscriminantAnalysis}.
+L'essai sur notre jeu de données d'entraînement de la méthode de l'analyse du discriminant linéaire permet de s'informer si ce jeu de données est effectivement bien linéairement séparable. Ce type de classification, étant de forme fermée (\emph{closed-form}), démontre son efficacité lors de la phase d'entraînement. La méthode est implémentée par Sklearn sous la librairie \emph{discriminant\_analysis.LinearDiscriminantAnalysis}.
 
 \subsubsection*{Bayes naïf gaussienne}
 Les méthodes de classification se basant sur l'application du théorème de Bayes font l'hypothèse qu'il exsite une indépendance conditionnelle entre chaque attribut sachant la valeur de l'étiquette de classe. L'utilisation d'une estimation par Maximum A Posteriori est aussi utilisée afin de déterminer les distributions de chacune des étiquettes de classe et de chacun des attributs en sachant la valeur de l'étiquette de classe. Nous avons décider, en plus, de faire l'hypothèse que les données suivent des distributions gaussiennens dans l'optique d'utiliser la méthode de classification de Bayes naïf gaussien. Celle-ci se retrouve implémentée par Sklearn sous la méthode \emph{naive\_bayes.GaussianNB}.
@@ -21,5 +21,5 @@ La méthode Sklearn \emph{ensemble.RandomForestClassifier} a la particularité d
 \subsubsection*{Machine à vecteur de support}
 Les méthodes de machines à vecteur de support sont également implémentées dans Sklearn et permettent d'apporter une approche "un-contre-un" à la classification. Celles-ci montrent aussi de bons résultats lorsque la dimensionalité des données est importante, ce qui pourrait être le cas de notre jeu de données d'entraînement. On utilise alors la méthode Sklearn \emph{svm.SVC} qui est spécifique à la classification.
 
-\subsection{Choix des métriques}
-??
+\subsubsection*{Régresseur Ridge}
+L'utilisation d'une méthode de type régresseur Ridge permet de traiter le problème tel une tâche de régression à sorties multiples. Pour chaque classe correspond une sortie, celle dont la valeur est la plus élevée est donc la classe prédite par le modèle.
