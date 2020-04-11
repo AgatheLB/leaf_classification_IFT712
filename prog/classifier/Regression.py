@@ -1,5 +1,4 @@
 from classifier.classifier import Classifier
-from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import RidgeClassifier
 
 
