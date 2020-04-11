@@ -1,0 +1,127 @@
+\section{Recherche des hyperparamètres}
+Afin de déterminer les hyper-paramètres menant à des performances maximales des modèles de classification (meilleure justesse d'entraînement et de validation), nous avons décidé d'utiliser une méthode de validation croisée. 
+
+Pour cela, nous avons pu la méthode Sklearn \emph{model\_selection.GridSearchCV}, qui prend en paramètre un estimateur (notre modèle de classification), un espace de paramètres à tester, une fonction d'évalutation (dans notre cas, la justesse).
+
+On s'intéresse maintenant aux hyper-paramètres des différents modèles pour notre validation croisée. 
+
+\subsubsection*{Perceptron MultiCouches}
+\begin{itemize}
+	\item \textbf{Taille des couches cachées}: Facteur faisant varier le nombre de neurones composant une couche cachée.
+	\item \textbf{Initialisation des taux d'apprentissage}: Valeur du taux d'apprentissage à l'initialisation du réseau. 
+	\item \textbf{Algorithme d'optimisation}: Choix de l'algorithme d'optimisation pour les mises à jours des poids du réseau (\emph{adam}, \emph{sgd}.
+	\item \textbf{Fonction d'activation}: Choix de la fonction d'activation utilisée par les couches cachées (\emph{relu}, \emph{logistic}).
+\end{itemize}
+
+\subsubsection*{K-Plus Proches Voisins}
+\begin{itemize}
+	\item \textbf{Nombre de voisins}: Valeur du nombre de voisins utilisé pour statuer le jeu de données.
+	\item \textbf{Poids}: Mesure de poids utilisé pour la prédiction (\emph{uniform}, \emph{distance}). 
+	\item \textbf{Algorithme}: Choix de l'algorithme utilisé pour déterminer les plus proches voisins (\emph{ball\_tree}, \emph{kd\_tree}, \emph{brute}, \emph{auto}).
+	\item \textbf{Taille des feuilles}: Valeur affectant la vitesse de contruction et de recherche des voisins. Utilisé par les algorithmes \emph{ball\_tree} et \emph{kd\_tree}.
+	\item \textbf{Puissance p}: Permet le choix de la métrique entre la distance de Manhattan et la distance Euclidienne.
+\end{itemize}
+
+\subsubsection*{Analyse du Discriminant Linéaire}
+\begin{itemize}
+	\item \textbf{Algorithme}: Choix de l'algorithme pour le calcul des distributions (\emph{svd}, \emph{lsqr}, \emph{eigen})
+	\item \textbf{Nombre de composants}: Valeur déterminant le nombre de composants utilisé pour la réduction de dimensionalité.
+	\item \textbf{Seuil}: Valeur du seuil spécifiquement utilisé pour l'algorithme \emph{svd}.
+\end{itemize}
+
+\subsubsection*{Bayes naïf gaussienne}
+\begin{itemize}
+	\item \textbf{Lissage des variables}: Valeur du lissage qui est une proportion de la variance devant être ajoutée afin de stabiliser les résultats des calculs.
+\end{itemize}
+
+\subsubsection*{Forêts aléatoires}
+\begin{itemize}
+	\item \textbf{Nombre d'estimateurs}: Valeur du nombre d'arbres utilisé pour construire l'arbre.
+	\item \textbf{Profondeur maximale}: Valeur de la profondeur maximale d'un arbre.
+\end{itemize}
+
+\subsubsection*{Machine à vecteur de support}
+\begin{itemize}
+	\item \textbf{Paramètre de régularisarion C}: Valeur déterminant la force de régularisation qui est la proportionnelle inverse de C.
+	\item \textbf{Noyau}: Choix du type de noyau utilisé par l'algorithme (\emph{linear}, \emph{poly}, \emph{rbf}, \emph{sigmoid})
+	\item \textbf{Gamma}: Valeur du coefficient utilisé par le noyau, spécifiquement pour les noyaux \emph{poly}, \emph{rbf} et \emph{sigmoid}.
+\end{itemize}
+
+\subsubsection*{Régresseur Ridge}
+\begin{itemize}
+	\item \textbf{Paramètre de régularisarion alpha}: Valeur déterminant la force de régularisation permettant de réduire la variance du modèle.
+\end{itemize}
+
+\newpage
+\section{Résultats}
+Les résultats de la recherche des hyper-paramètres ont permis de déterminer, dans un premier temps, les valeurs et choix des hyper-paramètres résultant des scores de justesse les plus élevés pour chacun des modèles. 
+Aussi, nous avons pu déterminer des scores de justesse sur un jeu de données de validation afin de s'assurer que les modèle généralisaient correctement. 
+
+\begin{table}[H]
+	\centering
+	\caption{Présentation des scores de justesse les plus performants des modèles}
+	\label{tab:accuracies_models}
+	\begin{tabular}{lllp{3cm}p{3cm}l}
+		\midrule
+		Modèle & Justesse d'entraînement (\%)& Justesse de validation (\%)\\
+		\midrule\midrule
+		MLP & 100.00 & 95.96\\
+		KNN  & 100.00 & 97.47\\
+		LDA  & 100.00 & 97.98\\
+		GNB  & 99.87 & 96.97\\
+		RF  &  100.00 & 98.48\\
+		SVM  & 100.00 & 95.45\\
+		Reg  & 99.37 & 91.92\\
+		\midrule
+	\end{tabular}
+\end{table}
+
+Ces résultats ont été établis selon les choix et valeurs des hyper-paramètres suivants:
+\subsubsection*{Perceptron MultiCouches}
+\begin{itemize}
+	\item \textbf{Taille des couches cachées}: $50$
+	\item \textbf{Initialisation des taux d'apprentissage}: $0.1$
+	\item \textbf{Algorithme d'optimisation}: \emph{adam}
+	\item \textbf{Fonction d'activation}: \emph{logistic}
+\end{itemize}
+
+\subsubsection*{K-Plus Proches Voisins}
+\begin{itemize}
+	\item \textbf{Nombre de voisins}: $1$
+	\item \textbf{Poids}: \emph{uniform}
+	\item \textbf{Algorithme}: \emph{ball\_tree}
+	\item \textbf{Taille des feuilles}: $10$
+	\item \textbf{Puissance p}: $1$
+\end{itemize}
+
+\subsubsection*{Analyse du Discriminant Linéaire}
+\begin{itemize}
+	\item \textbf{Algorithme}: \emph{svd}
+	\item \textbf{Nombre de composants}: $89$
+	\item \textbf{Seuil}: $0.1$
+\end{itemize}
+
+\subsubsection*{Bayes naïf gaussienne}
+\begin{itemize}
+	\item \textbf{Lissage des variables}: $0.001$
+\end{itemize}
+
+\subsubsection*{Forêts aléatoires}
+\begin{itemize}
+	\item \textbf{Nombre d'estimateurs}: $450$
+	\item \textbf{Profondeur maximale}: $30$
+\end{itemize}
+
+\subsubsection*{Machine à vecteur de support}
+\begin{itemize}
+	\item \textbf{Paramètre de régularisarion C}: $1000$
+	\item \textbf{Noyau}: \emph{rbf}
+	\item \textbf{Gamma}: $0.1$
+\end{itemize}
+
+\subsubsection*{Régresseur Ridge}
+\begin{itemize}
+	\item \textbf{Paramètre de régularisarion alpha}: $0.001$
+\end{itemize}
+
+
